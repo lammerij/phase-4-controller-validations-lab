@@ -1,5 +1,4 @@
 class AuthorsController < ApplicationController
-  
   def show
     author = Author.find(params[:id])
 
@@ -9,13 +8,16 @@ class AuthorsController < ApplicationController
   def create
     author = Author.create(author_params)
 
-    render json: author, status: :created
+    if author.save
+      render json: author, status: :created
+    else
+      render json: { errors: author.errors.messages}, status: :unprocessable_entity
+    end
   end
 
   private
-  
+
   def author_params
     params.permit(:email, :name)
   end
-  
 end
